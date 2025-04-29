@@ -1,0 +1,6 @@
+@Belissimo_Web_API_HostAddress = http://localhost:5279
+
+GET {{Belissimo_Web_API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
