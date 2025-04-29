@@ -1,4 +1,6 @@
 using DataAccessLayer.Data;
+using DataAccessLayer.Interfaces;
+using DataAccessLayer.Repasitories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +15,12 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+#endregion
+
+#region  Adding services to DI
+builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+
 
 #endregion
 
