@@ -6,7 +6,7 @@ namespace DataAccessLayer.Repasitories
 {
     public class Repasitory<TEntity> : IRepasitory<TEntity> where TEntity : class 
     {
-        private readonly AppDbContext _dbContext;
+        public readonly AppDbContext _dbContext;
 
         public Repasitory(AppDbContext appDbContext)
         {
