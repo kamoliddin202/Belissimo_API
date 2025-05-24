@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -44,7 +45,29 @@ namespace DataAccessLayer.Data
 
 
             base.OnModelCreating(modelBuilder);
+
+            //List<IdentityRole> roles = new List<IdentityRole>
+            //{
+            //    new IdentityRole
+            //    {
+            //        Id = "",
+            //        Name = "Admin",
+            //        NormalizedName = "ADMIN"
+            //    },
+            //    new IdentityRole
+            //    {
+            //        Name = "User",
+            //        NormalizedName = "USER"
+            //    }
+            //};
+            //modelBuilder.Entity<IdentityRole>().HasData(roles);
         }
 
     }
 }
+
+
+
+//ASP.NET Core'da 2 asosiy routing turi mavjud:
+//1. Conventional Routing – odatda MVC uchun ishlatiladi.
+//2. Attribute Routing – REST API uchun ishlatiladi (eng ko‘p qo‘llaniladi).

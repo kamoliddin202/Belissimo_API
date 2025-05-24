@@ -1,4 +1,5 @@
 using System.Text;
+using BusinessLogicLayer.Common;
 using BusinessLogicLayer.IInterfaces;
 using BusinessLogicLayer.Services;
 using DataAccessLayer.Data;
@@ -11,8 +12,31 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+//builder.Logging.ClearProviders();
+
+//builder.Logging.AddLog4Net();
+
+#region Seri Loggin configuration
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .WriteTo.File("Log/log.txt", rollingInterval: RollingInterval.Minute)
+    .CreateLogger();
+
+// user this line to override the built-in loggers  
+//builder.Host.UseSerilog();
+
+// use serilog for built-in loggers 
+builder.Logging.AddSerilog();
+
+
+//builder.Logging.ClearProviders();
+//builder.Logging.AddConsole();
+//builder.Logging.AddDebug();
+#endregion
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -71,11 +95,18 @@ builder.Services.AddTransient<IPromocodeInterface, PromocodeRepasitory>();
 builder.Services.AddTransient<IProductInterface, ProductRepasitory>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddTransient<IProductService, ProductService>();
+builder.Services.AddTransient<IUserService, UserService>(); 
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 #endregion
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    await SeedsAndDefaultAdminAsync(services);
+}
 
 app.UseSwagger ();
 app.UseSwaggerUI();
@@ -95,3 +126,50 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+
+
+static async Task SeedsAndDefaultAdminAsync(IServiceProvider serviceProvider)
+{
+    var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
+
+    string[] roles = { "Admin", "User" };
+
+    foreach (var role in roles)
+    {
+        if(! await roleManager.RoleExistsAsync(role))
+        {
+            await roleManager.CreateAsync(new IdentityRole(role));
+        }
+    }
+
+    var adminEmail = "admin@gmail.com";
+    var adminPassword = "Admin.123$";
+
+    var adminuser = await userManager.FindByEmailAsync(adminEmail);
+    if (adminuser == null)
+    {
+        var newAdmin = new User
+        {
+            UserName = adminEmail,
+            Email = adminEmail,
+            FullName = "Abdulloh",
+            EmailConfirmed = true,
+            Address = "Tashkent"
+            
+        };
+
+        var createAdmin = await userManager.CreateAsync(newAdmin, adminPassword);
+        if (createAdmin.Succeeded)
+        {
+            await userManager.AddToRoleAsync(newAdmin, "Admin");
+        }
+
+        else
+        {
+            throw new CustomException("User yaratilmadi " + string.Join(';', createAdmin.Errors.Select(c => c.Description)));
+        }
+    }
+
+}

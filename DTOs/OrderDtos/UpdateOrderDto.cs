@@ -2,7 +2,7 @@
 
 namespace DTOs.OrderDtos
 {
-    public class UpdateOrderDto
+    public class UpdateOrderDto : BaseEntity
     {
         public int TotalPrice { get; set; }
         public int OrderType { get; set; }

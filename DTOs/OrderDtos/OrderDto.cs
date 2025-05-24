@@ -1,4 +1,5 @@
-﻿using DataAccessLayer.Models;
+﻿using System.ComponentModel.DataAnnotations;
+using DataAccessLayer.Models;
 
 namespace DTOs.OrderDtos
 {

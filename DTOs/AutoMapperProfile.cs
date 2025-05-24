@@ -17,7 +17,8 @@ namespace DTOs
             CreateMap<AddCategoryDto, Category>();
             CreateMap<UpdateCategoryDto, Category>();
 
-            CreateMap<Order, OrderDto>();
+            CreateMap<Order, OrderDto>()
+                .ForMember(c => c.OrderItems, opt => opt.MapFrom(src => src.OrderItems));
             CreateMap<AddOrderDto, Order>();
             CreateMap<UpdateOrderDto, Order>();
 

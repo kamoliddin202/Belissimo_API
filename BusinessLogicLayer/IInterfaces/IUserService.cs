@@ -1,11 +1,13 @@
 ﻿using BusinessLogicLayer.Common;
+using DataAccessLayer.Models;
 using DTOs.UserDtos;
 
 namespace BusinessLogicLayer.IInterfaces
 {
     public interface IUserService
     {
-        Task<RegisterResult> Register(RegisterDto registerDto);
-        Task<LoginResult> Login(LoginDto loginDto);
+        Task<RegisterResult> RegisterAsync(RegisterDto registerDto);
+        Task<LoginResult> LoginAsync(LoginDto loginDto);
+        Task<IEnumerable<User>> GetAllUsersAysnc();
     }
 }

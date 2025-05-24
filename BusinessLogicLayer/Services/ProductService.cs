@@ -26,9 +26,13 @@ namespace BusinessLogicLayer.Services
 
         public async Task DeleteProductAsync(int id)
         {
+            if(id <= 0)
+                throw new ArgumentNullException(nameof(id));
+
             var product = await _unitOfWork.ProductInterface.GetEntityByIdAsync(id);
             if (product == null)
                 throw new KeyNotFoundException(nameof(id));
+
             await _unitOfWork.CategoryInterface.DeleteEntityAsyanc(product.Id);
             await _unitOfWork.SaveChangesAsync();
         }

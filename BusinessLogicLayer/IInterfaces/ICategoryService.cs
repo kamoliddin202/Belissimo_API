@@ -1,4 +1,5 @@
-﻿using DTOs.CategoryDtos;
+﻿using DataAccessLayer.Models;
+using DTOs.CategoryDtos;
 
 namespace BusinessLogicLayer.IInterfaces
 {
@@ -6,7 +7,7 @@ namespace BusinessLogicLayer.IInterfaces
     {
         public Task<IEnumerable<CategoryDto>> GetAllCategoriesAsync();
         public Task<CategoryDto> GetCategoryByIdAsync(int id);
-        public Task AddCategoryAsync(AddCategoryDto category);
+        public Task<Category> AddCategoryAsync(AddCategoryDto category);
         public Task UpdateCategoryAsync(UpdateCategoryDto updateCategoryDto);
         public Task DeleteCategoryAsync(int id);
         public Task<IEnumerable<CategoryDto>> GetCategoryWithProducts();

@@ -1,4 +1,5 @@
-﻿using DTOs.OrderDtos;
+﻿using DataAccessLayer.Models;
+using DTOs.OrderDtos;
 
 namespace BusinessLogicLayer.IInterfaces
 {
@@ -6,7 +7,7 @@ namespace BusinessLogicLayer.IInterfaces
     {
         Task<IEnumerable<OrderDto>> GetAllOrdersAsync();
         Task<OrderDto> GetOrderByIdAsync(int id);
-        Task AddOrderAsync(AddOrderDto addOrderDto);
+        Task<Order> AddOrderAsync(AddOrderDto addOrderDto);
         Task UpdateOrderAync(UpdateOrderDto updateOrderDto);
         Task DeleteOrderAsync(int id);
 
